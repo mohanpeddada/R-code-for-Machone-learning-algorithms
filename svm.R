@@ -1,0 +1,15 @@
+install.packages('e1071')
+library(e1071)
+dataset <- read.csv('ilpd.csv', header = FALSE)
+dataset$V11 <- factor(dataset$V11, labels = c(0,1))
+indices <- sample(nrow(dataset), round(nrow(dataset)*0.8))
+train_set <- dataset[indices,]
+test_set <- dataset[-indices,]
+svm_model <- svm(V11~., train_set)
+predictt <- predict(svm_model, test_set[,-11])
+library(Metrics)
+library(caret)
+summary(svm_model)
+confusionMatrix(factor(test_set$V11), predictt)
+recall((test_set$V11), predictt)
+precision()
